@@ -204,3 +204,13 @@ var _ = Describe("Test string key generators", func() {
 		})
 	})
 })
+
+func TestGetResourceKey(t *testing.T) {
+	namespace := "xnamespacex"
+	name := "xnamex"
+	actual := getResourceKey(namespace, name)
+	expected := "xnamespacex/xnamex"
+	if actual != expected {
+		t.Error(fmt.Sprintf("\nExpected %s\nActually %s", expected, actual))
+	}
+}
