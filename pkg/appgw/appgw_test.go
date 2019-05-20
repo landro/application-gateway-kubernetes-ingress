@@ -605,7 +605,6 @@ var _ = Describe("Tests `appgw.ConfigBuilder`", func() {
 				frontendPortID := appGwIdentifier.frontendPortID(generateFrontendPortName(443))
 				httpsListenerName := generateHTTPListenerName(frontendListenerIdentifier{443, domainName})
 				sslCert := appGwIdentifier.sslCertificateID(secretID.secretFullName())
-				requireServerNameIndication := true
 				httpsListener := &network.ApplicationGatewayHTTPListener{
 					Etag: to.StringPtr("*"),
 					Name: &httpsListenerName,
@@ -615,7 +614,9 @@ var _ = Describe("Tests `appgw.ConfigBuilder`", func() {
 						SslCertificate:              resourceRef(sslCert),
 						Protocol:                    network.HTTPS,
 						HostName:                    &domainName,
-						RequireServerNameIndication: &requireServerNameIndication,
+
+						// RequireServerNameIndication is not used in Application Gateway v2
+						RequireServerNameIndication: nil,
 					},
 				}
 
