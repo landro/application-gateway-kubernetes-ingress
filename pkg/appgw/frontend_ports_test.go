@@ -18,7 +18,7 @@ func TestFrontendPorts(t *testing.T) {
 var _ = Describe("Process ingress rules", func() {
 	Context("with many frontend ports", func() {
 		certs := getCertsTestFixture()
-		cb := makeConfigBuilderTestFixture(&certs)
+		cb := newConfigBuilderFixture(&certs)
 
 		ing1 := newIngressFixture()
 		ing1.Annotations[annotations.SslRedirectKey] = "true"

@@ -45,7 +45,7 @@ func makeHTTPURLPathMap() network.ApplicationGatewayURLPathMap {
 }
 
 func TestGetSslRedirectConfigResourceReference(t *testing.T) {
-	configBuilder := makeConfigBuilderTestFixture(nil)
+	configBuilder := newConfigBuilderFixture(nil)
 	ingress := newIngressFixture()
 	actualID := *(configBuilder.getSslRedirectConfigResourceReference(ingress).ID)
 	if actualID != redirectConfigID {
@@ -54,7 +54,7 @@ func TestGetSslRedirectConfigResourceReference(t *testing.T) {
 }
 
 func TestAddPathRulesZeroPathRules(t *testing.T) {
-	configBuilder := makeConfigBuilderTestFixture(nil)
+	configBuilder := newConfigBuilderFixture(nil)
 	ingress := newIngressFixture()
 	actualURLPathMap := makeHTTPURLPathMap()
 	// Ensure there are no path rules defined for this test
@@ -75,7 +75,7 @@ func TestAddPathRulesZeroPathRules(t *testing.T) {
 }
 
 func TestAddPathRulesManyPathRules(t *testing.T) {
-	configBuilder := makeConfigBuilderTestFixture(nil)
+	configBuilder := newConfigBuilderFixture(nil)
 	ingress := newIngressFixture()
 	pathMap := makeHTTPURLPathMap()
 
