@@ -1,8 +1,6 @@
 package appgw
 
 import (
-	"testing"
-
 	"github.com/Azure/application-gateway-kubernetes-ingress/pkg/annotations"
 	"github.com/Azure/azure-sdk-for-go/services/network/mgmt/2018-12-01/network"
 	. "github.com/onsi/ginkgo"
@@ -10,10 +8,7 @@ import (
 	"k8s.io/api/extensions/v1beta1"
 )
 
-func TestFrontendPorts(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Test setting up SSL redirect annotations")
-}
+// appgw_suite_test.go launches these Ginkgo tests
 
 var _ = Describe("Process ingress rules", func() {
 	Context("with many frontend ports", func() {

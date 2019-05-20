@@ -15,12 +15,13 @@ import (
 
 const provisionStateExpected = "--provisionStateExpected--"
 const rewriteRulesetID = "--RewriteRuleSet--"
-const redirectConfigID = "/subscriptions//resourceGroups//providers/Microsoft.Network/applicationGateways//" +
-	"redirectConfigurations/k8s-ag-ingress-" +
+var redirectConfigID = "/subscriptions/" + testFixturesSubscription +
+	"/resourceGroups/" + testFixtureResourceGroup +
+	"/providers/Microsoft.Network/applicationGateways/" + testFixtureAppGwName +
+	"/redirectConfigurations/" + agPrefix + "sslr-" +
 	testFixturesNamespace +
 	"-" +
-	testFixturesName +
-	"-sslr"
+	testFixturesName
 
 func makeHTTPURLPathMap() network.ApplicationGatewayURLPathMap {
 	return network.ApplicationGatewayURLPathMap{

@@ -12,7 +12,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-// appgw_suite_test.go launches these Ginkgo test
+// appgw_suite_test.go launches these Ginkgo tests
 
 var _ = Describe("Test string key generators", func() {
 	veryLongString := "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZAB"
