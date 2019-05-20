@@ -20,9 +20,9 @@ var _ = Describe("Process ingress rules", func() {
 		certs := getCertsTestFixture()
 		cb := makeConfigBuilderTestFixture(&certs)
 
-		ing1 := makeIngressFixture()
+		ing1 := newIngressFixture()
 		ing1.Annotations[annotations.SslRedirectKey] = "true"
-		ing2 := makeIngressFixture()
+		ing2 := newIngressFixture()
 		ing2.Annotations[annotations.SslRedirectKey] = "true"
 		ingressList := []*v1beta1.Ingress{
 			ing1,
