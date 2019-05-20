@@ -9,7 +9,7 @@ import (
 func (builder *appGwConfigBuilder) getFrontendPorts(ingressList []*v1beta1.Ingress) *[]network.ApplicationGatewayFrontendPort {
 	allPorts := make(map[int32]interface{})
 	for _, ingress := range ingressList {
-		_, fePorts, _ := builder.processIngressRules(ingress)
+		fePorts, _ := builder.processIngressRules(ingress)
 		for _, port := range fePorts.ToSlice() {
 			allPorts[port.(int32)] = nil
 		}

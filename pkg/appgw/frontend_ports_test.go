@@ -17,7 +17,7 @@ func TestFrontendPorts(t *testing.T) {
 
 var _ = Describe("Process ingress rules", func() {
 	Context("with many frontend ports", func() {
-		certs := getCertsTestFixture()
+		certs := newCertsFixture()
 		cb := newConfigBuilderFixture(&certs)
 
 		ing1 := newIngressFixture()
