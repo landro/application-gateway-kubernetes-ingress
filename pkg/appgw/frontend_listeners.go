@@ -88,7 +88,6 @@ func (builder *appGwConfigBuilder) getPublicIPID() *string {
 		// App Gateway will always have a Public IP address.
 		// In the case where somehow it does not have one - it may be appropriate to crash.
 		ips := strings.Join(jsonConfigs, ", ")
-
 		// Will call os.Exit(255)
 		// TODO(draychev): glog.Fatal does not expose stack trace.
 		glog.Fatal("HTTP Listener was not able to find a Public IP address for App Gateway. Available IPs:", ips)
