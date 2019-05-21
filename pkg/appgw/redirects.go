@@ -3,6 +3,7 @@ package appgw
 import (
 	n "github.com/Azure/azure-sdk-for-go/services/network/mgmt/2018-12-01/network"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/golang/glog"
 	"k8s.io/api/extensions/v1beta1"
 )
 
@@ -18,7 +19,10 @@ func (builder *appGwConfigBuilder) getRedirectConfigurations(ingressList []*v1be
 		// We will configure a Redirect only if the listener has TLS enabled (has a Certificate)
 		if isHTTPS && hasSslRedirect {
 			targetListener := resourceRef(builder.appGwIdentifier.httpListenerID(generateHTTPListenerName(listenerID)))
-			redirectConfigs = append(redirectConfigs, newSSLRedirectConfig(listenerConfig, targetListener))
+			newRedirect := newSSLRedirectConfig(listenerConfig, targetListener)
+			redirectConfigs = append(redirectConfigs, newRedirect)
+			redirectJson, _ := newRedirect.MarshalJSON()
+			glog.Infof("Created redirection configuration targeting listener %s. Not attached to a routing rule yet. Configuration: %s", *targetListener.ID, redirectJson)
 		}
 	}
 
