@@ -39,11 +39,11 @@ type appGwConfigBuilder struct {
 // NewConfigBuilder construct a builder
 func NewConfigBuilder(context *k8scontext.Context, appGwIdentifier *Identifier, originalConfig *network.ApplicationGatewayPropertiesFormat) ConfigBuilder {
 	return &appGwConfigBuilder{
-		// TODO
-		serviceBackendPairMap:  make(map[backendIdentifier](serviceBackendPortPair)),
-		probesMap:              make(map[backendIdentifier](*network.ApplicationGatewayProbe)),
-		backendHTTPSettingsMap: make(map[backendIdentifier](*network.ApplicationGatewayBackendHTTPSettings)),
-		backendPoolMap:         make(map[backendIdentifier](*network.ApplicationGatewayBackendAddressPool)),
+		// TODO(draychev): Decommission internal state
+		serviceBackendPairMap:  make(map[backendIdentifier]serviceBackendPortPair),
+		probesMap:              make(map[backendIdentifier]*network.ApplicationGatewayProbe),
+		backendHTTPSettingsMap: make(map[backendIdentifier]*network.ApplicationGatewayBackendHTTPSettings),
+		backendPoolMap:         make(map[backendIdentifier]*network.ApplicationGatewayBackendAddressPool),
 		k8sContext:             context,
 		appGwIdentifier:        *appGwIdentifier,
 		appGwConfig:            *originalConfig,
