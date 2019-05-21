@@ -15,6 +15,7 @@ import (
 
 const provisionStateExpected = "--provisionStateExpected--"
 const rewriteRulesetID = "--RewriteRuleSet--"
+
 var redirectConfigID = "/subscriptions/" + testFixturesSubscription +
 	"/resourceGroups/" + testFixtureResourceGroup +
 	"/providers/Microsoft.Network/applicationGateways/" + testFixtureAppGwName +
@@ -25,6 +26,7 @@ var redirectConfigID = "/subscriptions/" + testFixturesSubscription +
 
 func makeHTTPURLPathMap() network.ApplicationGatewayURLPathMap {
 	return network.ApplicationGatewayURLPathMap{
+		Name: to.StringPtr("-path-map-name-"),
 		ApplicationGatewayURLPathMapPropertiesFormat: &network.ApplicationGatewayURLPathMapPropertiesFormat{
 			PathRules: &[]network.ApplicationGatewayPathRule{
 				{
