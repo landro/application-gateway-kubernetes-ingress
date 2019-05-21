@@ -7,8 +7,6 @@ package appgw
 
 import (
 	"fmt"
-	"testing"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -204,14 +202,13 @@ var _ = Describe("Test string key generators", func() {
 			Expect(agPrefixValidator.MatchString("omega----Ω")).To(BeFalse())
 		})
 	})
+
+	Context("test whether getResourceKey works correctly", func(){
+		It("should construct correct key", func() {
+			actual := getResourceKey(testFixturesNamespace, testFixturesName)
+			expected := testFixturesNamespace + "/" + testFixturesName
+			Expect(actual).To(Equal(expected))
+		})
+	})
 })
 
-func TestGetResourceKey(t *testing.T) {
-	namespace := "xnamespacex"
-	name := "xnamex"
-	actual := getResourceKey(namespace, name)
-	expected := "xnamespacex/xnamex"
-	if actual != expected {
-		t.Error(fmt.Sprintf("\nExpected %s\nActually %s", expected, actual))
-	}
-}
