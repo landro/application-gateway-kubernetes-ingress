@@ -21,8 +21,8 @@ func (builder *appGwConfigBuilder) getRedirectConfigurations(ingressList []*v1be
 			targetListener := resourceRef(builder.appGwIdentifier.httpListenerID(generateHTTPListenerName(listenerID)))
 			newRedirect := newSSLRedirectConfig(listenerConfig, targetListener)
 			redirectConfigs = append(redirectConfigs, newRedirect)
-			redirectJson, _ := newRedirect.MarshalJSON()
-			glog.Infof("Created redirection configuration; not attached to a routing rule yet. Configuration: %s", redirectJson)
+			redirectJSON, _ := newRedirect.MarshalJSON()
+			glog.Infof("Created redirection configuration; not attached to a routing rule yet. Configuration: %s", redirectJSON)
 		}
 	}
 
