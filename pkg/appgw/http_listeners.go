@@ -12,8 +12,9 @@ func (builder *appGwConfigBuilder) HTTPListeners(ingressList []*v1beta1.Ingress)
 	builder.appGwConfig.FrontendPorts = builder.getFrontendPorts(ingressList)
 	builder.appGwConfig.HTTPListeners, _ = builder.getFrontendListeners(ingressList)
 
-	// App Gateway Rules can be configured to Redirect traffic to another listener (or external site)
-	// The controller here re-configures App Gateway automatically by reading specific Ingress annotations.
+	// App Gateway Rules can be configured to redirect HTTP traffic to HTTPS URLs.
+	// In this step here we create the redirection configurations. These configs are attached to request routing rules
+	// in the RequestRoutingRules step, which must be executed after HTTPListeners.
 	builder.appGwConfig.RedirectConfigurations = builder.getRedirectConfigurations(ingressList)
 
 	return builder, nil

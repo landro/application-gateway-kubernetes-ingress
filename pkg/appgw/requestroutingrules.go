@@ -6,6 +6,7 @@
 package appgw
 
 import (
+	"github.com/golang/glog"
 	"strconv"
 
 	"github.com/Azure/application-gateway-kubernetes-ingress/pkg/annotations"
@@ -152,7 +153,7 @@ func (builder *appGwConfigBuilder) RequestRoutingRules(ingressList [](*v1beta1.I
 					listenerHTTPID, urlPathMaps[listenerHTTPID],
 					defaultAddressPoolID, defaultHTTPSettingsID)
 
-				// if ssl-redirect annotation is present setup the correct redirect configuration.
+				// If ingress is annotated with "ssl-redirect" - setup redirection configuration.
 				if annotations.IsSslRedirect(ingress) {
 					builder.addPathRules(ingress, urlPathMaps[listenerHTTPID])
 				}
@@ -251,13 +252,17 @@ func (builder *appGwConfigBuilder) getSslRedirectConfigResourceReference(ingress
 func (builder *appGwConfigBuilder) addPathRules(ingress *v1beta1.Ingress, httpURLPathMap *network.ApplicationGatewayURLPathMap) {
 	if len(*httpURLPathMap.PathRules) == 0 {
 		// No paths. Basic
-		httpURLPathMap.DefaultRedirectConfiguration = builder.getSslRedirectConfigResourceReference(ingress)
+		redirectRef := builder.getSslRedirectConfigResourceReference(ingress)
+		glog.Infof("Attaching redirection config %s to basic request routing rule: %s\n", *redirectRef.ID, *httpURLPathMap.Name)
+		httpURLPathMap.DefaultRedirectConfiguration = redirectRef
 		return
 	}
 
 	for idx := range *httpURLPathMap.PathRules {
 		pathRule := &(*httpURLPathMap.PathRules)[idx]
-		pathRule.RedirectConfiguration = builder.getSslRedirectConfigResourceReference(ingress)
+		redirectRef := builder.getSslRedirectConfigResourceReference(ingress)
+		glog.Infof("Attaching redirection config %s request routing rule: %s\n", *redirectRef.ID, *pathRule.Name)
+		pathRule.RedirectConfiguration = redirectRef
 		pathRule.BackendAddressPool = nil
 		pathRule.BackendHTTPSettings = nil
 	}
