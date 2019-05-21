@@ -609,11 +609,11 @@ var _ = Describe("Tests `appgw.ConfigBuilder`", func() {
 					Etag: to.StringPtr("*"),
 					Name: &httpsListenerName,
 					ApplicationGatewayHTTPListenerPropertiesFormat: &network.ApplicationGatewayHTTPListenerPropertiesFormat{
-						FrontendIPConfiguration:     resourceRef("*"),
-						FrontendPort:                resourceRef(frontendPortID),
-						SslCertificate:              resourceRef(sslCert),
-						Protocol:                    network.HTTPS,
-						HostName:                    &domainName,
+						FrontendIPConfiguration: resourceRef("*"),
+						FrontendPort:            resourceRef(frontendPortID),
+						SslCertificate:          resourceRef(sslCert),
+						Protocol:                network.HTTPS,
+						HostName:                &domainName,
 
 						// RequireServerNameIndication is not used in Application Gateway v2
 						RequireServerNameIndication: nil,

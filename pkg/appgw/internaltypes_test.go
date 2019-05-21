@@ -203,7 +203,7 @@ var _ = Describe("Test string key generators", func() {
 		})
 	})
 
-	Context("test whether getResourceKey works correctly", func(){
+	Context("test whether getResourceKey works correctly", func() {
 		It("should construct correct key", func() {
 			actual := getResourceKey(testFixturesNamespace, testFixturesName)
 			expected := testFixturesNamespace + "/" + testFixturesName
@@ -211,4 +211,3 @@ var _ = Describe("Test string key generators", func() {
 		})
 	})
 })
-

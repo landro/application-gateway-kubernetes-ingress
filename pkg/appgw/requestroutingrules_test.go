@@ -6,11 +6,10 @@
 package appgw
 
 import (
-	"fmt"
-	"testing"
-
 	"github.com/Azure/azure-sdk-for-go/services/network/mgmt/2018-12-01/network"
 	"github.com/Azure/go-autorest/autorest/to"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 const provisionStateExpected = "--provisionStateExpected--"
@@ -47,69 +46,70 @@ func makeHTTPURLPathMap() network.ApplicationGatewayURLPathMap {
 	}
 }
 
-func TestGetSslRedirectConfigResourceReference(t *testing.T) {
-	configBuilder := newConfigBuilderFixture(nil)
-	ingress := newIngressFixture()
-	actualID := *(configBuilder.getSslRedirectConfigResourceReference(ingress).ID)
-	if actualID != redirectConfigID {
-		t.Error(fmt.Sprintf("\nExpected: %s\nActually: %s\n", redirectConfigID, actualID))
-	}
-}
+var _ = Describe("Test SSL Redirect Annotations", func() {
+	Context("test getSslRedirectConfigResourceReference", func() {
+		configBuilder := newConfigBuilderFixture(nil)
+		ingress := newIngressFixture()
+		actualID := *(configBuilder.getSslRedirectConfigResourceReference(ingress).ID)
+		It("generates expected ID", func() {
+			Expect(redirectConfigID).To(Equal(actualID))
+		})
+	})
 
-func TestAddPathRulesZeroPathRules(t *testing.T) {
-	configBuilder := newConfigBuilderFixture(nil)
-	ingress := newIngressFixture()
-	actualURLPathMap := makeHTTPURLPathMap()
-	// Ensure there are no path rules defined for this test
-	actualURLPathMap.PathRules = &[]network.ApplicationGatewayPathRule{}
+	Context("test getSslRedirectConfigResourceReference", func() {
+		configBuilder := newConfigBuilderFixture(nil)
+		ingress := newIngressFixture()
+		actualURLPathMap := makeHTTPURLPathMap()
+		// Ensure there are no path rules defined for this test
+		actualURLPathMap.PathRules = &[]network.ApplicationGatewayPathRule{}
 
-	// Action -- will mutate actualURLPathMap struct
-	configBuilder.addPathRules(ingress, &actualURLPathMap)
+		// Action -- will mutate actualURLPathMap struct
+		configBuilder.addPathRules(ingress, &actualURLPathMap)
 
-	actualID := *(actualURLPathMap.DefaultRedirectConfiguration.ID)
-	if actualID != redirectConfigID {
-		t.Error(fmt.Sprintf("\nExpected: %+v\nActually: %+v\n", redirectConfigID, actualID))
-	}
+		actualID := *(actualURLPathMap.DefaultRedirectConfiguration.ID)
+		It("generated expected ID", func() {
+			Expect(redirectConfigID).To(Equal(actualID))
+		})
 
-	if len(*actualURLPathMap.PathRules) != 0 {
-		t.Error(fmt.Sprintf("Expected length of PathRules to be 0. It is %d", len(*actualURLPathMap.PathRules)))
-	}
+		It("should still have 0 path rules", func() {
+			Expect(0).To(Equal(len(*actualURLPathMap.PathRules)))
+		})
+	})
 
-}
+	Context("test getSslRedirectConfigResourceReference", func() {
+		configBuilder := newConfigBuilderFixture(nil)
+		ingress := newIngressFixture()
+		pathMap := makeHTTPURLPathMap()
 
-func TestAddPathRulesManyPathRules(t *testing.T) {
-	configBuilder := newConfigBuilderFixture(nil)
-	ingress := newIngressFixture()
-	pathMap := makeHTTPURLPathMap()
+		// Ensure the test is setup correctly
+		It("should have length of PathRules to be 1", func() {
+			Expect(1).To(Equal(len(*pathMap.PathRules)))
+		})
 
-	// Ensure the test is setup correctly
-	if len(*pathMap.PathRules) != 1 {
-		t.Error(fmt.Sprintf("Expected length of PathRules to be 1. It is %d", len(*pathMap.PathRules)))
-	}
+		// Action -- will mutate pathMap struct
+		configBuilder.addPathRules(ingress, &pathMap)
 
-	// Action -- will mutate pathMap struct
-	configBuilder.addPathRules(ingress, &pathMap)
+		// Ensure the test is setup correctly
+		actual := *(*pathMap.PathRules)[0].ApplicationGatewayPathRulePropertiesFormat
 
-	// Ensure the test is setup correctly
-	actual := *(*pathMap.PathRules)[0].ApplicationGatewayPathRulePropertiesFormat
+		It("sohuld have a nil BackendAddressPool", func() {
+			Expect(actual.BackendAddressPool).To(BeNil())
+		})
 
-	if actual.BackendAddressPool != nil {
-		t.Error(fmt.Sprintf("BackendAddressPool expected to be nil. Its ID is %s\n", *actual.BackendAddressPool.ID))
-	}
+		It("should have a nil BackendHTTPSettings", func() {
+			Expect(actual.BackendHTTPSettings).To(BeNil())
+		})
 
-	if actual.BackendHTTPSettings != nil {
-		t.Error(fmt.Sprintf("BackendHTTPSettings expected to be nil. Its ID is %s\n", *actual.BackendHTTPSettings.ID))
-	}
+		It("sohuld have correct RedirectConfiguration.ID", func() {
+			Expect(redirectConfigID).To(Equal(*actual.RedirectConfiguration.ID))
+		})
 
-	if *actual.RedirectConfiguration.ID != redirectConfigID {
-		t.Error(fmt.Sprintf("RedirectConfiguration.ID expected to be %s Its ID is %s\n", redirectConfigID, *actual.RedirectConfiguration.ID))
-	}
+		It("should have correct RewriteRuleSet.ID", func() {
+			Expect(rewriteRulesetID).To(Equal(*actual.RewriteRuleSet.ID))
+		})
 
-	if *actual.RewriteRuleSet.ID != rewriteRulesetID {
-		t.Error(fmt.Sprintf("RewriteRuleSet expected to be %s Its ID is %s\n", rewriteRulesetID, *actual.RewriteRuleSet.ID))
-	}
-
-	if *actual.ProvisioningState != provisionStateExpected {
-		t.Error(fmt.Sprintf("ProvisioningState expected to be %s. It is %s\n", provisionStateExpected, *actual.ProvisioningState))
-	}
-}
+		It("should have correct ProvisioningState", func() {
+			Expect(provisionStateExpected).To(Equal(*actual.ProvisioningState))
+		})
+	})
+})
